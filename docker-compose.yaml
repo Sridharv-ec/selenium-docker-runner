@@ -1,68 +1,39 @@
 version: "3"
 services:
   hub:
-    image: seleniarm/hub:4.1.2-20220227
-    ports:
-      - "4444:4444"
+    image: selenium/hub:3.14
   chrome:
-    image: seleniarm/node-chromium:4.1.2-20220227
-    shm_size: '2g'
+    image: selenium/node-chrome:3.14      
     depends_on:
       - hub
     environment:
-      - SE_EVENT_BUS_HOST=hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - HUB_HOST=hub
   firefox:
-    image: seleniarm/node-firefox:4.1.2-20220227
-    shm_size: '2g'
+    image: selenium/node-firefox:3.14
+    shm_size: '1gb'   
     depends_on:
       - hub
     environment:
-      - SE_EVENT_BUS_HOST=hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-  book-flight-module1:
+      - HUB_HOST=hub
+  search-module:
     image: sridharvuttarkar/selenium-docker
     depends_on:
       - chrome
       - firefox
     environment:
+      - HUB_HOST=hub
       - BROWSER=firefox
-      - HUB_HOST=hub
-      - MODULE=book-flight-module.xml
-    volumes:
-      - ./book-result1:/usr/share/udemy/test-output
-  book-flight-module2:
-    image: sridharvuttarkar/selenium-docker
-    depends_on:
-      - chrome
-      - firefox
-    environment:
-      - BROWSER=chrome
-      - HUB_HOST=hub
-      - MODULE=book-flight-module.xml
-    volumes:
-      - ./book-result2:/usr/share/udemy/test-output
-  search-module1:
-    image: sridharvuttarkar/selenium-docker
-    depends_on:
-      - chrome
-      - firefox
-    environment:
-      - BROWSER=chrome
-      - HUB_HOST=hub
       - MODULE=search-modules.xml
     volumes:
-      - ./search-result1:/usr/share/udemy/test-output
-  search-module2:
+      - ./output/search-result:/usr/share/udemy/test-output      
+  book-flight-module:
     image: sridharvuttarkar/selenium-docker
     depends_on:
       - chrome
       - firefox
     environment:
-      - BROWSER=firefox
       - HUB_HOST=hub
-      - MODULE=search-modules.xml
+      - BROWSER=chrome
+      - MODULE=book-flight-module.xml
     volumes:
-      - ./search-result2:/usr/share/udemy/test-output
+      - ./output/book-result:/usr/share/udemy/test-output
