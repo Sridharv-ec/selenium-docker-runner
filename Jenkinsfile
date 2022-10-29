@@ -15,7 +15,7 @@ pipeline{
 		}
 		stage("Run Test"){
 			steps{
-				sh "docker-compose up search-module1 book-flight-module1"
+				sh "docker-compose up book-flight-module"
 				echo "executed docker-compose for running search-module and book-flight-module"
 			}
 		}
