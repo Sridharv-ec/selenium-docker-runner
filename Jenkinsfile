@@ -1,12 +1,6 @@
 pipeline{
 	agent any
 	stages{
-		stage("Pull Latest Image"){
-			steps{
-				sh "docker pull sridharvuttarkar/selenium-docker"
-				echo "pulled docker image selenium-docker"
-			}
-		}
 		stage("Start Grid"){
 			steps{
 				sh "docker-compose up -d hub chrome firefox"
@@ -22,9 +16,7 @@ pipeline{
 	}
 	post{
 		always{
-			archiveArtifacts artifacts: 'output/**'
 			sh "docker-compose down"
-			sh "sudo rm -rf output/"
 		}
 	}
 }
